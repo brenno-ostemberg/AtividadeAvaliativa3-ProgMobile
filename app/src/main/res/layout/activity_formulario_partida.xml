@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.activity.FormularioPartidaActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data da Partida:"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/editTextDataPartida"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="DD/MM/AAAA"
+        android:inputType="date"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jogador 1:"
+        android:textSize="16sp"/>
+
+    <Spinner
+        android:id="@+id/spinnerJogador1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Placar Jogador 1:"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/editTextPlacarJogador1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="2"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jogador 2:"
+        android:textSize="16sp"/>
+
+    <Spinner
+        android:id="@+id/spinnerJogador2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Placar Jogador 2:"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/editTextPlacarJogador2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="2"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/botaoSalvarPartida"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salvar Partida"
+        android:backgroundTint="@color/design_default_color_primary"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout>
