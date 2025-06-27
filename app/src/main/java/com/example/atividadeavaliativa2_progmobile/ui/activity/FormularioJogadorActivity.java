@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.atividadeavaliativa2_progmobile.R;
 import com.example.atividadeavaliativa2_progmobile.database.AppDatabase;
-import com.example.atividadeavaliativa2_progmobile.database.entity.Jogador;
+import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,7 +20,7 @@ public class FormularioJogadorActivity extends AppCompatActivity {
 
     private EditText editTextNome, editTextNickname, editTextEmail, editTextDataNascimento;
     private AppDatabase db;
-    private Jogador jogadorAtual;
+    private Usuario usuarioAtual;
     // Executor para rodar tarefas em background
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     // Handler para postar resultados na thread principal (UI)
@@ -51,7 +51,7 @@ public class FormularioJogadorActivity extends AppCompatActivity {
             }
         } else {
             setTitle("Adicionar Jogador");
-            jogadorAtual = new Jogador();
+            usuarioAtual = new Usuario();
         }
 
         botaoSalvar.setOnClickListener(v -> salvarJogador());
@@ -60,17 +60,17 @@ public class FormularioJogadorActivity extends AppCompatActivity {
     private void carregarJogador(final int id) {
         executorService.execute(() -> {
             // Operação de background
-            final Jogador jogador = db.jogadorDao().getJogadorById(id);
+            final Usuario usuario = db.usuarioDao().getJogadorById(id);
 
             // Posta o resultado para a thread principal para atualizar a UI
             mainThreadHandler.post(() -> {
                 // Operação na UI Thread
-                if (jogador != null) {
-                    jogadorAtual = jogador;
-                    editTextNome.setText(jogador.getNome());
-                    editTextNickname.setText(jogador.getNickname());
-                    editTextEmail.setText(jogador.getEmail());
-                    editTextDataNascimento.setText(jogador.getDataNascimento());
+                if (usuario != null) {
+                    usuarioAtual = usuario;
+                    editTextNome.setText(usuario.getNome());
+                    editTextNickname.setText(usuario.getNickname());
+                    editTextEmail.setText(usuario.getEmail());
+                    editTextDataNascimento.setText(usuario.getDataNascimento());
                 } else {
                     // Tratar caso onde o jogador não foi encontrado com o ID fornecido
                     Toast.makeText(FormularioJogadorActivity.this, "Erro: Jogador não encontrado.", Toast.LENGTH_LONG).show();
@@ -94,27 +94,27 @@ public class FormularioJogadorActivity extends AppCompatActivity {
 
         // Atualiza o objeto jogadorAtual com os dados do formulário
         // Certifique-se que jogadorAtual não é null (deve ser inicializado no onCreate)
-        if (jogadorAtual == null) {
+        if (usuarioAtual == null) {
             // Isso não deveria acontecer se a lógica do onCreate estiver correta
             Toast.makeText(this, "Erro interno ao salvar.", Toast.LENGTH_SHORT).show();
             return;
         }
-        jogadorAtual.setNome(nome);
-        jogadorAtual.setNickname(nickname);
-        jogadorAtual.setEmail(email);
-        jogadorAtual.setDataNascimento(dataNasc);
+        usuarioAtual.setNome(nome);
+        usuarioAtual.setNickname(nickname);
+        usuarioAtual.setEmail(email);
+        usuarioAtual.setDataNascimento(dataNasc);
 
         // Cria uma cópia final do jogador para usar dentro da lambda do executor
-        final Jogador jogadorParaSalvar = jogadorAtual;
+        final Usuario usuarioParaSalvar = usuarioAtual;
 
         executorService.execute(() -> {
             // Operação de background
             boolean sucesso;
             try {
-                if (jogadorParaSalvar.getIdJogador() == 0) { // Novo jogador
-                    db.jogadorDao().insereJogador(jogadorParaSalvar);
+                if (usuarioParaSalvar.getIdJogador() == 0) { // Novo jogador
+                    db.usuarioDao().insereJogador(usuarioParaSalvar);
                 } else { // Jogador existente
-                    db.jogadorDao().atualizaJogador(jogadorParaSalvar);
+                    db.usuarioDao().atualizaJogador(usuarioParaSalvar);
                 }
                 sucesso = true;
             } catch (Exception e) {

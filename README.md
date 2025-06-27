@@ -20,19 +20,19 @@ No estágio atual, o software foi projetado para um único tipo de usuário, que
     * **Permissões:**
         * Cadastrar, visualizar, editar e remover jogadores.
         * Registrar, visualizar e remover partidas.
-        * Consultar o histórico de partidas de um jogador específico através de um filtro.
+        * Consultar o histórico de partidas de um usuario específico através de um filtro.
 
 ## Requisitos Funcionais:
 
 | ID | Requisito Funcional | Usuário Envolvido | Entradas Necessárias | Processamento Realizado | Saídas e Relatórios Gerados |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **RF01** | Cadastrar um novo jogador | Administrador | Nome completo, Nickname (apelido), E-mail e Data de Nascimento. | O sistema valida se o `Nickname` já está em uso para garantir que seja único. Se não estiver, os dados são salvos na tabela de jogadores. | O novo jogador é exibido na lista de jogadores cadastrados. Uma mensagem de sucesso ("Jogador salvo!") é mostrada. |
-| **RF02** | Editar dados de um jogador | Administrador | Seleção de um jogador na lista e a submissão de novos dados para os campos desejados. | O sistema carrega os dados atuais do jogador no formulário de edição e salva as alterações no banco de dados. | A lista de jogadores é atualizada com as novas informações. |
-| **RF03** | Excluir um jogador | Administrador | Seleção de um jogador na lista (através de um clique longo) e confirmação na caixa de diálogo. | O sistema remove o jogador do banco de dados. Graças à configuração de chave estrangeira (`onDelete = CASCADE`), todas as partidas associadas a esse jogador também são excluídas automaticamente. | O jogador é removido da lista. Uma mensagem de sucesso ("Jogador excluído!") é exibida. |
+| **RF01** | Cadastrar um novo usuario | Administrador | Nome completo, Nickname (apelido), E-mail e Data de Nascimento. | O sistema valida se o `Nickname` já está em uso para garantir que seja único. Se não estiver, os dados são salvos na tabela de jogadores. | O novo usuario é exibido na lista de jogadores cadastrados. Uma mensagem de sucesso ("Jogador salvo!") é mostrada. |
+| **RF02** | Editar dados de um usuario | Administrador | Seleção de um usuario na lista e a submissão de novos dados para os campos desejados. | O sistema carrega os dados atuais do usuario no formulário de edição e salva as alterações no banco de dados. | A lista de jogadores é atualizada com as novas informações. |
+| **RF03** | Excluir um usuario | Administrador | Seleção de um usuario na lista (através de um clique longo) e confirmação na caixa de diálogo. | O sistema remove o usuario do banco de dados. Graças à configuração de chave estrangeira (`onDelete = CASCADE`), todas as partidas associadas a esse usuario também são excluídas automaticamente. | O usuario é removido da lista. Uma mensagem de sucesso ("Jogador excluído!") é exibida. |
 | **RF04** | Registrar uma nova partida | Administrador | Data da partida, seleção do Jogador 1 e Jogador 2 (de uma lista de jogadores cadastrados) e os respectivos placares. | O sistema valida se os dois jogadores selecionados são diferentes e se todos os campos foram preenchidos. Em seguida, salva a partida no banco de dados. | A nova partida é exibida na lista de partidas. Uma mensagem de sucesso ("Partida salva!") é mostrada. |
 | **RF05** | Excluir uma partida | Administrador | Seleção de uma partida na lista (clique longo) e confirmação na caixa de diálogo. | O sistema solicita confirmação e, se afirmativo, remove o registro da partida do banco de dados. | A partida é removida da lista. Uma mensagem de sucesso ("Partida excluída!") é exibida. |
 | **RF06** | Listar todas as partidas | Administrador | Acesso à tela "Controle de Partidas". | O sistema busca todas as partidas registradas e os nicknames dos jogadores envolvidos para compor a visualização. | É exibida uma lista contendo a data, os nomes dos jogadores e os placares de cada partida. |
-| **RF07** | Filtrar partidas por jogador | Administrador | Digitação do `Nickname` de um jogador e o acionamento do botão "Filtrar". | O sistema busca o ID do jogador correspondente ao `Nickname` e, em seguida, busca todas as partidas em que esse jogador participou (seja como Jogador 1 ou Jogador 2). | A lista de partidas é atualizada, mostrando apenas os jogos que incluem o jogador filtrado. |
+| **RF07** | Filtrar partidas por usuario | Administrador | Digitação do `Nickname` de um usuario e o acionamento do botão "Filtrar". | O sistema busca o ID do usuario correspondente ao `Nickname` e, em seguida, busca todas as partidas em que esse usuario participou (seja como Jogador 1 ou Jogador 2). | A lista de partidas é atualizada, mostrando apenas os jogos que incluem o usuario filtrado. |
 
 ### Sugestões de Novos Requisitos Funcionais
 

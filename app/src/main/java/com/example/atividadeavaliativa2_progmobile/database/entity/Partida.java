@@ -8,13 +8,13 @@ import androidx.room.ForeignKey;
 @Entity (
     foreignKeys = {
         @ForeignKey(
-                entity = Jogador.class,
+                entity = Usuario.class,
                 parentColumns = "idJogador",
                 childColumns = "idJogador1",
                 onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(
-                entity = Jogador.class,
+                entity = Usuario.class,
                 parentColumns = "idJogador",
                 childColumns = "idJogador2",
                 onDelete = ForeignKey.CASCADE

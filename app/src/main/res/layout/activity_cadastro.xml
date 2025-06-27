@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/fundo_app"
+    tools:context=".CadastroActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@android:drawable/ic_menu_myplaces"
+            app:tint="@color/azul_primario"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Logo do App"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/titulo_cadastro"
+            android:textColor="@color/texto_primario"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <EditText
+                    android:id="@+id/campo_nome"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/hint_nome"
+                    android:inputType="textPersonName|textCapWords"
+                    android:background="@drawable/edit_text_background"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textColor="@color/texto_primario"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <EditText
+                    android:id="@+id/campo_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/hint_nickname"
+                    android:inputType="text"
+                    android:background="@drawable/edit_text_background"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textColor="@color/texto_primario"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <EditText
+                    android:id="@+id/campo_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/hint_email"
+                    android:inputType="textEmailAddress"
+                    android:background="@drawable/edit_text_background"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textColor="@color/texto_primario"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <EditText
+                    android:id="@+id/campo_senha"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/hint_senha"
+                    android:inputType="textPassword"
+                    android:background="@drawable/edit_text_background"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textColor="@color/texto_primario"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/button_salvar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/texto_botao_salvar"
+            android:textColor="@color/branco"
+            android:background="@drawable/botao_primario_background"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</ScrollView>

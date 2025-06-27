@@ -11,12 +11,12 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import com.example.atividadeavaliativa2_progmobile.R;
-import com.example.atividadeavaliativa2_progmobile.database.entity.Jogador;
+import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
 
 // Adapter para exibir a lista de jogadores em uma ListView
-public class JogadorAdapter extends ArrayAdapter<Jogador> {
+public class JogadorAdapter extends ArrayAdapter<Usuario> {
 
-    public JogadorAdapter(@NonNull Context context, @NonNull List<Jogador> jogadores) {
+    public JogadorAdapter(@NonNull Context context, @NonNull List<Usuario> jogadores) {
         // Usamos 0 como resource ID porque vamos inflar nosso próprio layout customizado (item_jogador.xml)
         super(context, 0, jogadores);
     }
@@ -45,13 +45,13 @@ public class JogadorAdapter extends ArrayAdapter<Jogador> {
         }
 
         // Obtém o objeto Jogador para esta posição
-        Jogador jogadorAtual = getItem(position);
+        Usuario usuarioAtual = getItem(position);
 
         // Preenche as views com os dados do jogador
         // Verifica se o jogadorAtual não é nulo (boa prática)
-        if (jogadorAtual != null && viewHolder.textViewNome != null && viewHolder.textViewNickname != null) {
-            viewHolder.textViewNome.setText(jogadorAtual.getNome());
-            viewHolder.textViewNickname.setText(jogadorAtual.getNickname());
+        if (usuarioAtual != null && viewHolder.textViewNome != null && viewHolder.textViewNickname != null) {
+            viewHolder.textViewNome.setText(usuarioAtual.getNome());
+            viewHolder.textViewNickname.setText(usuarioAtual.getNickname());
         }
         // else {
             // Opcional: Definir um texto padrão ou tratar o caso de views/jogador nulos

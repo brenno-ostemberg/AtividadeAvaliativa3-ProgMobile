@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.atividadeavaliativa2_progmobile.R;
 import com.example.atividadeavaliativa2_progmobile.database.AppDatabase;
-import com.example.atividadeavaliativa2_progmobile.database.entity.Jogador;
+import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Partida;
 import com.example.atividadeavaliativa2_progmobile.utils.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -116,9 +116,9 @@ public class ListaPartidasActivity extends AppCompatActivity {
             try {
                 // Lógica de filtro
                 if (filtroNicknameAtual != null && !filtroNicknameAtual.isEmpty()) {
-                    Jogador jogadorFiltrado = db.jogadorDao().encontreJogadorPorNickName(filtroNicknameAtual);
-                    if (jogadorFiltrado != null) {
-                        partidasDoBanco = db.partidaDao().encontrarPartidasPeloIdJogador(jogadorFiltrado.getIdJogador());
+                    Usuario usuarioFiltrado = db.usuarioDao().encontreJogadorPorNickName(filtroNicknameAtual);
+                    if (usuarioFiltrado != null) {
+                        partidasDoBanco = db.partidaDao().encontrarPartidasPeloIdJogador(usuarioFiltrado.getIdJogador());
                     } else {
                         partidasDoBanco = new ArrayList<>(); // Nickname não encontrado, lista vazia
                         mainThreadHandler.post(()-> Toast.makeText(ListaPartidasActivity.this, "Jogador '" + filtroNicknameAtual + "' não encontrado.", Toast.LENGTH_SHORT).show());
@@ -129,9 +129,9 @@ public class ListaPartidasActivity extends AppCompatActivity {
                 }
 
                 // Obter nicknames para todas as partidas exibidas (ou todos os jogadores se for mais fácil)
-                List<Jogador> todosJogadores = db.jogadorDao().getAllJogadores();
-                for (Jogador jogador : todosJogadores) {
-                    nicknamesDoBanco.put(jogador.getIdJogador(), jogador.getNickname());
+                List<Usuario> todosJogadores = db.usuarioDao().getAllJogadores();
+                for (Usuario usuario : todosJogadores) {
+                    nicknamesDoBanco.put(usuario.getIdJogador(), usuario.getNickname());
                 }
                 sucesso = true;
             } catch (Exception e) {

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.atividadeavaliativa2_progmobile.R;
-import com.example.atividadeavaliativa2_progmobile.database.entity.Jogador;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Partida;
 
 import java.util.List;

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-</resources>
+    <color name="azul_primario">#0D47A1</color> <color name="azul_variacao_escura">#002171</color> <color name="amarelo_acento">#FFAB00</color> <color name="verde_sucesso">#4CAF50</color> <color name="branco">#FFFFFFFF</color>
+    <color name="fundo_app">#F5F5F5</color> <color name="texto_primario">#212121</color> <color name="texto_secundario">#757575</color> <color name="borda_campo">#BDBDBD</color> </resources>

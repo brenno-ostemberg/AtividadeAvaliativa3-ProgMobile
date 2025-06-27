@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.atividadeavaliativa2_progmobile.R;
 import com.example.atividadeavaliativa2_progmobile.database.AppDatabase;
-import com.example.atividadeavaliativa2_progmobile.database.entity.Jogador;
+import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Partida;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class FormularioPartidaActivity extends AppCompatActivity {
     private Button botaoSalvarPartida;
 
     private AppDatabase db;
-    private List<Jogador> listaCompletaJogadores;
+    private List<Usuario> listaCompletaJogadores;
     private ArrayAdapter<String> nicknamesAdapter;
 
     private ExecutorService executorService;
@@ -109,15 +109,15 @@ public class FormularioPartidaActivity extends AppCompatActivity {
 
     private void carregarJogadoresParaSpinners() {
         executorService.execute(() -> {
-            final List<Jogador> jogadoresDoBanco = db.jogadorDao().getAllJogadores();
+            final List<Usuario> jogadoresDoBanco = db.usuarioDao().getAllJogadores();
             final ArrayList<String> nicknames = new ArrayList<>();
 
             mainThreadHandler.post(() -> {
                 listaCompletaJogadores.clear(); // Limpa a lista antes de adicionar novos
                 if (jogadoresDoBanco != null && !jogadoresDoBanco.isEmpty()) {
                     listaCompletaJogadores.addAll(jogadoresDoBanco); // Guarda a lista completa de objetos Jogador
-                    for (Jogador jogador : jogadoresDoBanco) {
-                        nicknames.add(jogador.getNickname());
+                    for (Usuario usuario : jogadoresDoBanco) {
+                        nicknames.add(usuario.getNickname());
                     }
                     nicknamesAdapter.clear();
                     nicknamesAdapter.addAll(nicknames);
