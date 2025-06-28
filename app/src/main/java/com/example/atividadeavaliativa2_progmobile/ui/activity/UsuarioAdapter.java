@@ -14,9 +14,9 @@ import com.example.atividadeavaliativa2_progmobile.R;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
 
 // Adapter para exibir a lista de jogadores em uma ListView
-public class JogadorAdapter extends ArrayAdapter<Usuario> {
+public class UsuarioAdapter extends ArrayAdapter<Usuario> {
 
-    public JogadorAdapter(@NonNull Context context, @NonNull List<Usuario> jogadores) {
+    public UsuarioAdapter(@NonNull Context context, @NonNull List<Usuario> jogadores) {
         // Usamos 0 como resource ID porque vamos inflar nosso próprio layout customizado (item_jogador.xml)
         super(context, 0, jogadores);
     }
@@ -30,7 +30,7 @@ public class JogadorAdapter extends ArrayAdapter<Usuario> {
         // Verifica se a view está sendo reutilizada, senão infla uma nova
         if (convertView == null) {
             // Infla o layout customizado para cada item da lista
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_jogador, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_usuario, parent, false);
 
             // Cria um novo ViewHolder e armazena as referências das views internas
             viewHolder = new ViewHolder();

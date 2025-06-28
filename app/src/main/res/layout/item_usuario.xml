@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -9,7 +10,7 @@
         android:id="@+id/textViewNomeJogador"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nome do Jogador"
+        tools:text="@string/hint_nome"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -17,7 +18,7 @@
         android:id="@+id/textViewNicknameJogador"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nickname"
+        tools:text="@string/hint_nickname"
         android:textSize="14sp" />
 
 </LinearLayout>

@@ -11,7 +11,7 @@ import androidx.room.Index;
 public class Usuario {
 
     @PrimaryKey(autoGenerate = true)
-    public int idJogador;
+    public int idUsuario;
 
     @ColumnInfo(name = "nome")
     public String nome;
@@ -37,12 +37,12 @@ public class Usuario {
     public String getSenhaHash() { return senhaHash; }
     public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
 
-    public int getIdJogador() {
-        return idJogador;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setIdJogador(int idJogador) {
-        this.idJogador = idJogador;
+    public void setidUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNome() {

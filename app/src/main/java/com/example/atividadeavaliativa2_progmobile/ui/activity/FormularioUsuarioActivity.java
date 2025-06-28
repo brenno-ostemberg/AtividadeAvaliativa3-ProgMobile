@@ -16,7 +16,7 @@ import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FormularioJogadorActivity extends AppCompatActivity {
+public class FormularioUsuarioActivity extends AppCompatActivity {
 
     private EditText editTextNome, editTextNickname, editTextEmail, editTextDataNascimento;
     private AppDatabase db;
@@ -29,7 +29,7 @@ public class FormularioJogadorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_formulario_jogador);
+        setContentView(R.layout.activity_formulario_usuario);
 
         db = AppDatabase.getDatabase(this);
         editTextNome = findViewById(R.id.editTextNome);
@@ -60,7 +60,7 @@ public class FormularioJogadorActivity extends AppCompatActivity {
     private void carregarJogador(final int id) {
         executorService.execute(() -> {
             // Operação de background
-            final Usuario usuario = db.usuarioDao().getJogadorById(id);
+            final Usuario usuario = db.usuarioDao().getUsuarioById(id);
 
             // Posta o resultado para a thread principal para atualizar a UI
             mainThreadHandler.post(() -> {
@@ -73,7 +73,7 @@ public class FormularioJogadorActivity extends AppCompatActivity {
                     editTextDataNascimento.setText(usuario.getDataNascimento());
                 } else {
                     // Tratar caso onde o jogador não foi encontrado com o ID fornecido
-                    Toast.makeText(FormularioJogadorActivity.this, "Erro: Jogador não encontrado.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FormularioUsuarioActivity.this, "Erro: Jogador não encontrado.", Toast.LENGTH_LONG).show();
                     finish(); // Fecha a activity se não encontrar o jogador para editar
                 }
             });
@@ -84,7 +84,7 @@ public class FormularioJogadorActivity extends AppCompatActivity {
         final String nome = editTextNome.getText().toString().trim();
         final String nickname = editTextNickname.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
-        final String dataNasc = editTextDataNascimento.getText().toString().trim();
+        final String dataNascimento = editTextDataNascimento.getText().toString().trim();
 
         // Validação básica
         if (nome.isEmpty() || nickname.isEmpty()) {
@@ -102,7 +102,7 @@ public class FormularioJogadorActivity extends AppCompatActivity {
         usuarioAtual.setNome(nome);
         usuarioAtual.setNickname(nickname);
         usuarioAtual.setEmail(email);
-        usuarioAtual.setDataNascimento(dataNasc);
+        usuarioAtual.setDataNascimento(dataNascimento);
 
         // Cria uma cópia final do jogador para usar dentro da lambda do executor
         final Usuario usuarioParaSalvar = usuarioAtual;
@@ -111,10 +111,10 @@ public class FormularioJogadorActivity extends AppCompatActivity {
             // Operação de background
             boolean sucesso;
             try {
-                if (usuarioParaSalvar.getIdJogador() == 0) { // Novo jogador
-                    db.usuarioDao().insereJogador(usuarioParaSalvar);
+                if (usuarioParaSalvar.getIdUsuario() == 0) { // Novo jogador
+                    db.usuarioDao().insereUsuario(usuarioParaSalvar);
                 } else { // Jogador existente
-                    db.usuarioDao().atualizaJogador(usuarioParaSalvar);
+                    db.usuarioDao().atualizaUsuario(usuarioParaSalvar);
                 }
                 sucesso = true;
             } catch (Exception e) {
@@ -128,10 +128,10 @@ public class FormularioJogadorActivity extends AppCompatActivity {
             mainThreadHandler.post(() -> {
                 // Operação na UI Thread
                 if (finalSucesso) {
-                    Toast.makeText(FormularioJogadorActivity.this, "Jogador salvo!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FormularioUsuarioActivity.this, "Jogador salvo!", Toast.LENGTH_SHORT).show();
                     finish(); // Fecha a activity e volta para a lista
                 } else {
-                    Toast.makeText(FormularioJogadorActivity.this, "Erro: Este nickname já existe!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FormularioUsuarioActivity.this, "Erro: Este nickname já existe!", Toast.LENGTH_LONG).show();
                 }
             });
         });

@@ -13,13 +13,13 @@ import java.util.List;
 public interface UsuarioDao {
 
     @Delete
-    void excluiJogador(Usuario usuario);
+    void excluiUsuario(Usuario usuario);
 
     @Insert
-    void insereJogador(Usuario usuario);
+    void insereUsuario(Usuario usuario);
 
     @Update
-    void atualizaJogador(Usuario usuario);
+    void atualizaUsuario(Usuario usuario);
 
     //verificar essa implementação depois
     default Usuario findByEmail(String email) {
@@ -27,15 +27,17 @@ public interface UsuarioDao {
     }
 
     @Query("SELECT * FROM Usuario WHERE nickname = :nickname LIMIT 1")
-    Usuario encontreJogadorPorNickName(String nickname);
+    Usuario encontreUsuarioPorNickName(String nickname);
 
     @Insert
     long insereJogadorEPegaId(Usuario usuario);
 
     @Query("SELECT * FROM Usuario")
-    List<Usuario> getAllJogadores();
+    List<Usuario> getAllUsuarios();
 
-    @Query("SELECT * FROM Usuario WHERE idJogador = :id")
-    Usuario getJogadorById(int id);
+    @Query("SELECT * FROM Usuario WHERE idUsuario = :id")
+    Usuario getUsuarioById(int id);
 
+    @Query("SELECT * FROM Usuario WHERE id != :idParaExcluir ORDER BY nickname ASC")
+    List<Usuario> getAllExceto(int idParaExcluir);
 }

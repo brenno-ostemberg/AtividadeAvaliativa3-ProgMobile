@@ -20,9 +20,12 @@ import com.example.atividadeavaliativa2_progmobile.utils.MainActivity;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-/*coletar os dados, consultar o banco em background para encontrar o usuário pelo e-mail,
+/*
+Coletar os dados, consultar o banco em background para encontrar o usuário pelo e-mail,
 comparar o hash da senha digitada com o hash armazenado e, em caso de sucesso, salvar o ID do usuário
-em uma "sessão" (SharedPreferences) e navegar para a tela principal do aplicativo.*/
+em uma "sessão" (SharedPreferences) e navegar para a tela principal do aplicativo.
+*/
+
 public class LoginActivity extends AppCompatActivity {
     private EditText editEmail, editSenha;
     private Button btnEntrar;
@@ -75,26 +78,30 @@ public class LoginActivity extends AppCompatActivity {
 
         Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
+            // Busca o usuário
             Usuario usuario = usuarioDao.findByEmail(email);
             boolean loginValido = false;
 
+            // Condição 1: Verifica se o usuário existe
             if (usuario == null) {
                 runOnUiThread(() -> Toast.makeText(LoginActivity.this, "E-mail ou senha inválidos", Toast.LENGTH_SHORT).show());
                 return;
             }
 
+            // Condição 2: Verifica se a senha está correta
             String senhaDigitadaHash = PasswordHasher.hashPassword(senha);
             if (!senhaDigitadaHash.equals(usuario.getSenhaHash())) {
                 runOnUiThread(() -> Toast.makeText(LoginActivity.this, "E-mail ou senha inválidos", Toast.LENGTH_SHORT).show());
                 return;
             }
 
+            // Login bem-sucedido
             runOnUiThread(() -> {
                 Toast.makeText(LoginActivity.this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show();
 
                 // Salva o ID do usuário logado no SharedPreferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("usuario_id", usuario.getIdJogador());
+                editor.putInt("usuario_id", usuario.getIdUsuario());
                 editor.putBoolean("is_logged_in", true);
                 editor.apply();
 

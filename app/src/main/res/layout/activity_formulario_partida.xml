@@ -1,87 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:fillViewport="true"
+    android:background="@color/fundo_app"
     tools:context=".ui.activity.FormularioPartidaActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Data da Partida:"
-        android:textSize="16sp"/>
-
-    <EditText
-        android:id="@+id/editTextDataPartida"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="DD/MM/AAAA"
-        android:inputType="date"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Jogador 1:"
-        android:textSize="16sp"/>
-
-    <Spinner
-        android:id="@+id/spinnerJogador1"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="8dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Placar Jogador 1:"
-        android:textSize="16sp"/>
-
-    <EditText
-        android:id="@+id/editTextPlacarJogador1"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="0"
-        android:inputType="number"
-        android:maxLength="2"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Jogador 2:"
-        android:textSize="16sp"/>
-
-    <Spinner
-        android:id="@+id/spinnerJogador2"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="8dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Placar Jogador 2:"
-        android:textSize="16sp"/>
-
-    <EditText
-        android:id="@+id/editTextPlacarJogador2"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="0"
-        android:inputType="number"
-        android:maxLength="2"
-        android:layout_marginBottom="24dp"/>
-
-    <Button
-        android:id="@+id/botaoSalvarPartida"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Salvar Partida"
-        android:backgroundTint="@color/design_default_color_primary"
-        android:textColor="@android:color/white"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registrar Nova Partida"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/texto_primario"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data da Partida:"
+                    android:textColor="@color/texto_primario"
+                    android:textSize="16sp"/>
+
+                <EditText
+                    android:id="@+id/editTextDataPartida"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="DD/MM/AAAA"
+                    android:inputType="date"
+                    android:background="@drawable/edit_text_background"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jogador 1 (Você):"
+                    android:textColor="@color/texto_primario"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/text_view_jogador1_nome"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:background="@drawable/edit_text_background"
+                    android:backgroundTint="#E0E0E0"
+                    tools:text="Nickname do Jogador Logado"
+                    android:textSize="18sp"
+                    android:textColor="@color/texto_secundario"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/editTextPlacarJogador1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Seu placar"
+                    android:background="@drawable/edit_text_background"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:layout_marginBottom="24dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Oponente (Jogador 2):"
+                    android:textColor="@color/texto_primario"
+                    android:textSize="16sp"/>
+
+                <Spinner
+                    android:id="@+id/spinner_oponente"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/edit_text_background"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextPlacarJogador2"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Placar do oponente"
+                    android:background="@drawable/edit_text_background"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:inputType="number"
+                    android:maxLength="2"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/botaoSalvarPartida"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="24dp"
+            android:text="Salvar Partida"
+            android:textColor="@color/branco"
+            android:background="@drawable/botao_primario_background"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+</ScrollView>

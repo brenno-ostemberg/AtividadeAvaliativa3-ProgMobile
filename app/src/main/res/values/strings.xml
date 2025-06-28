@@ -7,5 +7,10 @@
     <string name="hint_email">E-mail</string>
     <string name="hint_senha">Senha</string>
     <string name="texto_botao_salvar">Salvar Cadastro</string>
+    <string name="formato_data_partida">Data: %1$s</string>
+    <string name="item_partida_label_data">Data:</string>
+    <string name="item_partida_placeholder_jogador1">Jogador 1</string>
+    <string name="item_partida_placeholder_jogador2">Jogador 2</string>
+    <string name="item_partida_placeholder_placar">0 x 0</string>
 
 </resources>

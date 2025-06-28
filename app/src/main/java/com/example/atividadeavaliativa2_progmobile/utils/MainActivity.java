@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 //import androidx.core.view.WindowInsetsCompat;
 
 import com.example.atividadeavaliativa2_progmobile.R;
-import com.example.atividadeavaliativa2_progmobile.ui.activity.ListaJogadoresActivity;
+import com.example.atividadeavaliativa2_progmobile.ui.activity.ListaUsuariosActivity;
 import com.example.atividadeavaliativa2_progmobile.ui.activity.ListaPartidasActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         botaoControleJogadores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListaJogadoresActivity.class);
+                Intent intent = new Intent(MainActivity.this, ListaUsuariosActivity.class);
                 startActivity(intent);
             }
         });

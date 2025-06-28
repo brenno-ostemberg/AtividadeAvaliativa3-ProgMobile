@@ -21,17 +21,17 @@
         </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.ListaJogadoresActivity"
+        <activity android:name=".ui.activity.ListaUsuariosActivity"
             android:exported="false"
             android:parentActivityName=".utils.MainActivity"
             android:label="Lista de Jogadores">
         </activity>
 
-        <activity android:name=".ui.activity.FormularioJogadorActivity"
+        <activity android:name=".ui.activity.FormularioUsuarioActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activity.ListaJogadoresActivity"> <meta-data
+            android:parentActivityName=".ui.activity.ListaUsuariosActivity"> <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activity.ListaJogadoresActivity"/>
+                android:value=".ui.activity.ListaUsuariosActivity"/>
         </activity>
 
         <activity
@@ -44,6 +44,13 @@
             android:name=".ui.activity.FormularioPartidaActivity"
             android:exported="false"
             android:label="Formulário de Partida"
+            android:parentActivityName=".ui.activity.ListaPartidasActivity">
+        </activity>
+
+        <activity
+            android:name=".ui.activity.CadastroActivity"
+            android:exported="false"
+            android:label="Gerencia o Cadastro dos Usuários"
             android:parentActivityName=".ui.activity.ListaPartidasActivity">
         </activity>
 

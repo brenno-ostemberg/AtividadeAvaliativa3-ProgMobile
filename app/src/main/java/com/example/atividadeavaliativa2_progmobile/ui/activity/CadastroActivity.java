@@ -83,7 +83,7 @@ public class CadastroActivity extends AppCompatActivity {
         Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             try {
-                usuarioDao.insereJogador(novoUsuario);
+                usuarioDao.insereUsuario(novoUsuario);
 
                 // Após a inserção, mostramos uma mensagem de sucesso na UI thread
                 runOnUiThread(() -> {
