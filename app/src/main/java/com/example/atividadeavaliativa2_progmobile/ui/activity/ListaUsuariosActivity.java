@@ -20,49 +20,60 @@ import java.util.concurrent.Executors;
 import com.example.atividadeavaliativa2_progmobile.R;
 import com.example.atividadeavaliativa2_progmobile.database.AppDatabase;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
-import com.example.atividadeavaliativa2_progmobile.utils.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class ListaUsuariosActivity extends AppCompatActivity {
-
-    private ListView listViewJogadores;
+    // Variáveis de Interface
+    private ListView listViewUsuarios;
     private UsuarioAdapter adapter;
-    private AppDatabase db;
-    // Executor das tarefas em background
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    // Handler para postar resultados na thread principal (UI)
-    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
+    // Variáveis de Dados e Controle
+    private AppDatabase db;
     private SharedPreferences sharedPreferences;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_usuarios);
+        setTitle("Lista de Usuários");
 
-        sharedPreferences = getSharedPreferences("login_prefs", Context.MODE_PRIVATE);
+        // 1. Inicializa os componentes de controle e interface
+        inicializarComponentes();
 
+        // 2. Configura os listeners de clique para os botões e a lista
+        configurarListeners();
+    }
+
+    private void inicializarComponentes() {
+        // Conecta as variáveis da UI aos componentes do layout
+        listViewUsuarios = findViewById(R.id.listViewUsuarios);
+
+        // Inicializa os componentes de dados e controle
         db = AppDatabase.getDatabase(this);
-        listViewJogadores = findViewById(R.id.listViewJogadores);
+        sharedPreferences = getSharedPreferences("login_prefs", Context.MODE_PRIVATE);
+    }
 
-        // Botão para adicionar novo usuario
-        FloatingActionButton fab = findViewById(R.id.fabAdicionarJogador);
-        fab.setOnClickListener(view -> {
+    private void configurarListeners() {
+        // Configura o listener do Floating Action Button (FAB) para adicionar usuário
+        FloatingActionButton fabAdicionarUsuario = findViewById(R.id.fabAdicionarUsuario); // Renomear ID no XML
+        fabAdicionarUsuario.setOnClickListener(view -> {
             Intent intent = new Intent(ListaUsuariosActivity.this, FormularioUsuarioActivity.class);
             startActivity(intent);
         });
 
-        // Botão para voltar para main
-        ImageButton botaoVoltarMainJogadores = findViewById(R.id.botaoVoltarMainJogadores);
-        botaoVoltarMainJogadores.setOnClickListener(v -> {
-            Intent intent = new Intent(ListaUsuariosActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            finish();
-        });
+        // Configura o listener do botão de voltar
+        ImageButton botaoVoltarMain = findViewById(R.id.botaoVoltarMain); // Renomear ID no XML
+        botaoVoltarMain.setOnClickListener(v -> finish()); // finish() é mais simples se esta tela foi chamada da MainActivity
 
-        configurarListenersListView();
+        // Configura os listeners de clique e clique longo da lista
+        listViewUsuarios.setOnItemClickListener((parent, view, position, id) -> editarUsuario(position));
+        listViewUsuarios.setOnItemLongClickListener((parent, view, position, id) -> {
+            exibirDialogoExclusao(position);
+            return true; // Evento consumido
+        });
     }
 
     @Override
@@ -74,82 +85,63 @@ public class ListaUsuariosActivity extends AppCompatActivity {
 
     private void verificarLoginDoUsuario() {
         boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);
-
         if (!isLoggedIn) {
             Intent intent = new Intent(ListaUsuariosActivity.this, LoginActivity.class);
-
-            // Essas 'flags' são MUITO importantes. Elas dizem ao Android:
-            // "Vá para a tela de login E limpe totalmente o histórico de telas que veio antes."
-            // Isso impede que o usuário aperte o botão 'Voltar' no celular e consiga
-            // burlar o login, entrando na tela protegida.
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
             startActivity(intent);
             finish();
         }
     }
 
     private void carregarUsuarios() {
-        // Executa a busca no banco de dados em uma thread separada
         executorService.execute(() -> {
-            // Operação de background
-            final List<Usuario> jogadores = db.usuarioDao().getAllUsuarios();
-
-            // Posta o resultado para a thread principal para atualizar a tela
-            mainThreadHandler.post(() -> {
-                adapter = new UsuarioAdapter(ListaUsuariosActivity.this, jogadores);
-                listViewJogadores.setAdapter(adapter);
-            });
+            try {
+                final List<Usuario> jogadores = db.usuarioDao().getAllUsuarios();
+                // Lança o resultado na thread principal para atualizar a tela
+                mainThreadHandler.post(() -> {
+                    adapter = new UsuarioAdapter(ListaUsuariosActivity.this, jogadores);
+                    listViewUsuarios.setAdapter(adapter);
+                });
+            }
+            catch (Exception e) {
+                mainThreadHandler.post(() -> Toast.makeText(this,
+                        "Erro ao carregar usuários.", Toast.LENGTH_SHORT).show());
+            }
         });
     }
 
-    private void configurarListenersListView() {
-        // Listener para clique normal (EDITAR)
-        listViewJogadores.setOnItemClickListener((parent, view, position, id) -> {
-
-            Usuario usuarioSelecionado = adapter.getItem(position);
-
-            if (usuarioSelecionado == null) {
-                Toast.makeText(this, "Erro ao selecionar jogador.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Intent intent = new Intent(ListaUsuariosActivity.this, FormularioUsuarioActivity.class);
-            intent.putExtra("JOGADOR_ID", usuarioSelecionado.getIdUsuario());
-            startActivity(intent);
-        });
-
-        // Listener para clique longo (EXCLUIR)
-        listViewJogadores.setOnItemLongClickListener((parent, view, position, id) -> {
-            Usuario usuarioSelecionado = adapter.getItem(position);
-            if (usuarioSelecionado != null) {
-                exibirDialogoExclusao(usuarioSelecionado);
-            } else {
-                Toast.makeText(this, "Erro ao selecionar jogador para exclusão.", Toast.LENGTH_SHORT).show();
-            }
-            return true; // Evento consumido
-        });
+    private void editarUsuario(int position) {
+        Usuario usuarioSelecionado = adapter.getItem(position);
+        if (usuarioSelecionado == null) {
+            Toast.makeText(this, "Erro ao selecionar usuário.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, FormularioUsuarioActivity.class);
+        intent.putExtra("USUARIO_ID", usuarioSelecionado.getIdUsuario());
+        startActivity(intent);
     }
 
-    private void exibirDialogoExclusao(final Usuario usuario) {
+    private void exibirDialogoExclusao(int position) {
+        Usuario usuarioSelecionado = adapter.getItem(position);
+        if (usuarioSelecionado == null) {
+            Toast.makeText(this, "Erro ao selecionar usuário.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         new AlertDialog.Builder(this)
-                .setTitle("Excluir Jogador")
-                .setMessage("Tem certeza que deseja excluir " + usuario.getNickname() + "? Todas as partidas associadas também serão excluídas.")
-                // Usar lambda para simplificar
-                .setPositiveButton("Sim", (dialog, which) -> excluirUsuario(usuario))
+                .setTitle("Excluir Usuário")
+                .setMessage("Tem certeza que deseja excluir " + usuarioSelecionado.getNickname() + "? Todas as partidas associadas também serão excluídas.")
+                .setPositiveButton("Sim", (dialog, which) -> excluirUsuario(usuarioSelecionado))
                 .setNegativeButton("Não", null)
                 .show();
     }
 
     private void excluirUsuario(final Usuario usuario) {
         // Remove o usuário da tela imediatamente, sem precisar esperar o banco de dados
-        if (adapter != null) {
-            adapter.remove(usuario);
-            adapter.notifyDataSetChanged();
-        }
-        Toast.makeText(ListaUsuariosActivity.this, "Jogador excluído!", Toast.LENGTH_SHORT).show();
+        adapter.remove(usuario);
+        adapter.notifyDataSetChanged();
+        Toast.makeText(this, "Usuário excluído!", Toast.LENGTH_SHORT).show();
 
-        // Executa a exclusão real no banco de dados em background
+        // Operação real de exclusão em background
         executorService.execute(() -> db.usuarioDao().excluiUsuario(usuario));
     }
 

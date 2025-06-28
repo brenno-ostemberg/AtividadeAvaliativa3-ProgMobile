@@ -12,5 +12,7 @@
     <string name="item_partida_placeholder_jogador1">Jogador 1</string>
     <string name="item_partida_placeholder_jogador2">Jogador 2</string>
     <string name="item_partida_placeholder_placar">0 x 0</string>
+    <string name="item_voltar_ao_meu_principal">Voltar ao meu principal</string>"
+    <string name="item_adicionar_novo_usuario">Adicionar novo usuário</string>"
 
 </resources>
