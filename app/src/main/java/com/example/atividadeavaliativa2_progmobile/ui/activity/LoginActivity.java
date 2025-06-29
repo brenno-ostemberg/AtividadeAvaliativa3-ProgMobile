@@ -16,6 +16,7 @@ import com.example.atividadeavaliativa2_progmobile.database.AppDatabase;
 import com.example.atividadeavaliativa2_progmobile.database.dao.UsuarioDao;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
 import com.example.atividadeavaliativa2_progmobile.utils.MainActivity;
+import com.example.atividadeavaliativa2_progmobile.utils.PasswordHasher;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -90,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         String email = editEmail.getText().toString().trim();
-        String senha = editSenha.getText().toString();
+        String senha = editSenha.getText().toString().trim();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) {
             Toast.makeText(this, "E-mail e senha são obrigatórios", Toast.LENGTH_SHORT).show();
@@ -104,14 +105,13 @@ public class LoginActivity extends AppCompatActivity {
 
             // Condição 1: Verifica se o usuário existe
             if (usuario == null) {
-                runOnUiThread(() -> Toast.makeText(LoginActivity.this, "E-mail ou senha inválidos", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(LoginActivity.this, "E-mail inválido", Toast.LENGTH_SHORT).show());
                 return;
             }
 
             // Condição 2: Verifica se a senha está correta
-            String senhaDigitadaHash = PasswordHasher.hashPassword(senha);
-            if (!senhaDigitadaHash.equals(usuario.getSenhaHash())) {
-                runOnUiThread(() -> Toast.makeText(LoginActivity.this, "E-mail ou senha inválidos", Toast.LENGTH_SHORT).show());
+            if (!PasswordHasher.checkPassword(senha, usuario.getSenhaHash())) {
+                runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Senha inválida", Toast.LENGTH_SHORT).show());
                 return;
             }
 

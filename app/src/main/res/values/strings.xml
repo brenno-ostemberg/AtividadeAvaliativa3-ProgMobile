@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Controle de Campeonatos</string>
+    <string name="app_name">Fifa Controller</string>
 
     <string name="titulo_cadastro">Cadastro de Usuário</string>
     <string name="hint_nome">Nome completo</string>

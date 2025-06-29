@@ -31,6 +31,7 @@ import com.example.atividadeavaliativa2_progmobile.database.AppDatabase;
 import com.example.atividadeavaliativa2_progmobile.R;
 import com.example.atividadeavaliativa2_progmobile.database.dao.UsuarioDao;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
+import com.example.atividadeavaliativa2_progmobile.utils.PasswordHasher;
 
 /**
 Activity responsável pelo fluxo de cadastro de um novo usuário.
@@ -41,6 +42,7 @@ e insere o novo usuário no banco de dados.
 public class CadastroActivity extends AppCompatActivity {
 
     // Variáveis de launcher
+    private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<String> galeriaLauncher;
 
@@ -94,6 +96,14 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     private void inicializarLaunchers() {
+        requestPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(), isGranted -> {
+                    if (isGranted) {
+                        abrirCamera();
+                    } else {
+                        Toast.makeText(this, "Permissão da câmera necessária para tirar foto.", Toast.LENGTH_LONG).show();
+                    }
+                });
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -168,10 +178,8 @@ public class CadastroActivity extends AppCompatActivity {
                 .setTitle("Escolha uma foto")
                 .setItems(opcoes, (dialog, which) -> {
                     if (which == 0) {
-                        // Lógica para abrir a câmera
-                        abrirCamera();
+                        requestPermissionLauncher.launch(android.Manifest.permission.CAMERA);
                     } else {
-                        // Lógica para abrir a galeria
                         abrirGaleria();
                     }
                 })
@@ -189,12 +197,11 @@ public class CadastroActivity extends AppCompatActivity {
         String nome = campoNome.getText().toString().trim();
         String nickname = campoNickname.getText().toString().trim();
         String email = campoEmail.getText().toString().trim();
-        String senha = campoSenha.getText().toString();
+        String senha = campoSenha.getText().toString().trim();
 
         // 3. Processa a senha e cria o objeto Usuario
         String senhaHash = PasswordHasher.hashPassword(senha);
         Usuario novoUsuario = new Usuario(nome, nickname, email, senhaHash, caminhoFotoPerfil);
-        // Futuramente, aqui também adicionaremos a URI da foto do perfil.
 
         // 4. Salva o novo usuário no banco de dados em uma thread separada
         salvarUsuarioNoBanco(novoUsuario);
@@ -238,6 +245,7 @@ public class CadastroActivity extends AppCompatActivity {
                     finish();
                 });
             } catch (Exception e) {
+                Log.e("CadastroActivity", "Erro ao inserir usuário no banco", e);
                 runOnUiThread(() -> Toast.makeText(this, "Erro: E-mail ou Nickname já em uso.", Toast.LENGTH_LONG).show());
             }
         });

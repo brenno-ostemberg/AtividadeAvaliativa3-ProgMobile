@@ -68,6 +68,8 @@ dependencies {
     // Se 'libs.room.compiler' não estiver definido no seu libs.versions.toml, veja a nota abaixo.
     annotationProcessor(libs.room.compiler) // Geralmente androidx.room:room-compiler
 
+    implementation(libs.jbcrypt)
+
     // Dependências de Teste
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

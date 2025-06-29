@@ -21,10 +21,8 @@ public interface UsuarioDao {
     @Update
     void atualizaUsuario(Usuario usuario);
 
-    //verificar essa implementação depois
-    default Usuario findByEmail(String email) {
-        return null;
-    }
+    @Query("SELECT * FROM Usuario WHERE email = :email LIMIT 1")
+    Usuario findByEmail(String email);
 
     @Query("SELECT * FROM Usuario WHERE nickname = :nickname LIMIT 1")
     Usuario encontreUsuarioPorNickName(String nickname);

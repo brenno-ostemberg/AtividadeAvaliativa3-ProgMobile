@@ -10,6 +10,7 @@ constraintlayout = "2.2.1"
 roomCommonJvm = "2.7.2"
 roomRuntimeAndroid = "2.7.2"
 room = "2.7.2"
+jbcrypt = "0.4"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -22,6 +23,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
