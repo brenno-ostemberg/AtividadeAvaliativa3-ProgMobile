@@ -28,7 +28,7 @@ em uma "sessão" (SharedPreferences) e navegar para a tela principal do aplicati
 
 public class LoginActivity extends AppCompatActivity {
     private EditText editEmail, editSenha;
-    private Button btnEntrar;
+    private Button buttonEntrar;
     private TextView tvCadastrar;
     private UsuarioDao usuarioDao;
 
@@ -39,27 +39,48 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Verifica se o usuário já está logado, se sim então joga ele direto para tela principal
+        // 1. Inicializa o SharedPreferences
+        sharedPreferences = getSharedPreferences("login_prefs", Context.MODE_PRIVATE);
+
+        // 2. Verifica se o usuário já está logado, se sim então joga ele direto para tela principal
+        if (verificaLoginAutomatico()) {
+            return;
+        }
+
+        // 3. Se o usuário não estiver logado, continua com o login
+        setContentView(R.layout.activity_login);
+        setTitle("Login");
+
+        // 4. Inicializa os componentes
+        inicializarComponentes();
+
+        // 5. Configura os listeners
+        configurarListeners();
+    }
+
+    private boolean verificaLoginAutomatico() {
         if (sharedPreferences.getBoolean("is_logged_in", false)) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
-            return;
+            return true;
         }
+        return false;
+    }
 
-        setContentView(R.layout.activity_login);
-
-        // Inicializa o DAO e o SharedPreferences
+    private void inicializarComponentes() {
         usuarioDao = AppDatabase.getDatabase(getApplicationContext()).usuarioDao();
         sharedPreferences = getSharedPreferences("login_prefs", Context.MODE_PRIVATE);
 
         editEmail = findViewById(R.id.edit_text_email_login);
         editSenha = findViewById(R.id.edit_text_senha_login);
-        btnEntrar = findViewById(R.id.button_entrar);
+        buttonEntrar = findViewById(R.id.button_entrar);
         tvCadastrar = findViewById(R.id.text_view_cadastrar);
+    }
 
-        btnEntrar.setOnClickListener(v -> login());
+    private void configurarListeners() {
+        buttonEntrar.setOnClickListener(v -> login());
 
         tvCadastrar.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, CadastroActivity.class);
@@ -80,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
         executor.execute(() -> {
             // Busca o usuário
             Usuario usuario = usuarioDao.findByEmail(email);
-            boolean loginValido = false;
 
             // Condição 1: Verifica se o usuário existe
             if (usuario == null) {
