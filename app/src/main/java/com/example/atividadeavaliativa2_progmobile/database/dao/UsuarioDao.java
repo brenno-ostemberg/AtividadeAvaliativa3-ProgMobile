@@ -38,6 +38,6 @@ public interface UsuarioDao {
     @Query("SELECT * FROM Usuario WHERE idUsuario = :id")
     Usuario getUsuarioById(int id);
 
-    @Query("SELECT * FROM Usuario WHERE id != :idParaExcluir ORDER BY nickname ASC")
+    @Query("SELECT * FROM Usuario WHERE idUsuario != :idParaExcluir ORDER BY nickname ASC")
     List<Usuario> getAllExceto(int idParaExcluir);
 }

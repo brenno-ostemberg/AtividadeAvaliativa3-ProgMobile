@@ -2,14 +2,12 @@ package com.example.atividadeavaliativa2_progmobile.ui.activity;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Arrays;
 
 // Classe auxiliar para criar e verificar hashes de senha
 public class PasswordHasher {
     public static String hashPassword(String password) {
         try {
-            // Usamos SHA-256, um algoritmo de hash seguro e padrão da indústria.
+            // Usamos SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedPassword = md.digest(password.getBytes());
 

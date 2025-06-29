@@ -1,6 +1,7 @@
 package com.example.atividadeavaliativa2_progmobile.database.entity;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 import androidx.room.Index;
@@ -28,54 +29,50 @@ public class Usuario {
     @ColumnInfo(name = "senhaHash")
     private String senhaHash;
 
-    @ColumnInfo(name = "uriFoto")
-    private String uriFoto; //salva o caminho, não o binário
+    @ColumnInfo(name = "fotoPerfil")
+    private String fotoPerfil; //salva o caminho, não o binário
 
     public Usuario() {
     }
 
+    @Ignore
+    public Usuario(String nome, String nickname, String email, String senhaHash, String fotoPerfil) {
+        this.nome = nome;
+        this.nickname = nickname;
+        this.email = email;
+        this.dataNascimento = null;
+        this.senhaHash = senhaHash;
+        this.fotoPerfil = fotoPerfil;
+    }
+
+    public int getIdUsuario() { return idUsuario; }
+
+    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
+
+    public String getNome() { return nome; }
+
+    public void setNome(String nome) { this.nome = nome; }
+
+    public String getNickname() { return nickname; }
+
+    public void setNickname(String nickname) { this.nickname = nickname; }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public String getDataNascimento() { return dataNascimento; }
+
+    public void setDataNascimento(String dataNascimento) { this.dataNascimento = dataNascimento; }
+
     public String getSenhaHash() { return senhaHash; }
+
     public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
 
-    public int getIdUsuario() {
-        return idUsuario;
-    }
+    public String getFotoPerfil() { return fotoPerfil; }
 
-    public void setidUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
+    public void setFotoPerfil(String fotoPerfil) { this.fotoPerfil = fotoPerfil; }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(String dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
 }
 
 

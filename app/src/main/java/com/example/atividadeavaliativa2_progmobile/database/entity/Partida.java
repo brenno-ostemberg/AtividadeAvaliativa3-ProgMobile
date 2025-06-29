@@ -1,6 +1,7 @@
 package com.example.atividadeavaliativa2_progmobile.database.entity;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 import androidx.room.ForeignKey;
@@ -9,16 +10,20 @@ import androidx.room.ForeignKey;
     foreignKeys = {
         @ForeignKey(
                 entity = Usuario.class,
-                parentColumns = "idJogador",
+                parentColumns = "idUsuario",
                 childColumns = "idJogador1",
                 onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Usuario.class,
-                parentColumns = "idJogador",
+                parentColumns = "idUsuario",
                 childColumns = "idJogador2",
                 onDelete = ForeignKey.CASCADE
         )
+    },
+    indices = {
+            @Index(value = {"idJogador1"}),
+            @Index(value = {"idJogador2"})
     }
 )
 public class Partida {
