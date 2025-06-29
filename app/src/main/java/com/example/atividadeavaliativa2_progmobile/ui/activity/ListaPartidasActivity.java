@@ -25,79 +25,95 @@ import com.example.atividadeavaliativa2_progmobile.R;
 import com.example.atividadeavaliativa2_progmobile.database.AppDatabase;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Usuario;
 import com.example.atividadeavaliativa2_progmobile.database.entity.Partida;
-import com.example.atividadeavaliativa2_progmobile.utils.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 
 public class ListaPartidasActivity extends AppCompatActivity {
 
+    // Variáveis de interface
     private ListView listViewPartidas;
+    private EditText editTextFiltroNickname;
     private PartidaAdapter adapter;
+
+    // Variáveis de controle e dados
     private AppDatabase db;
+    private SharedPreferences sharedPreferences;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+
+    // Variáveis de estado
     private List<Partida> listaDePartidas;
     private Map<Integer, String> mapaNicknamesJogadores;
-
-    private ExecutorService executorService;
-    private Handler mainThreadHandler;
-    private EditText editTextFiltroNickname;
     private String filtroNicknameAtual = null;
-
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_partidas);
 
+        // 1. Inicializa todos os componentes, adapters e variáveis necessárias
+        inicializarComponentes();
+
+        // 2. Configura os listeners de clique para os botões de navegação e da lista
+        configurarListeners();
+
+        // 3. Configura os listeners específicos da funcionalidade de filtro
+        configurarFiltro();
+    }
+
+    private void inicializarComponentes() {
+        setTitle("Minhas Partidas");
+        db = AppDatabase.getDatabase(this);
         sharedPreferences = getSharedPreferences("login_prefs", Context.MODE_PRIVATE);
 
-        setTitle("Lista de Partidas");
-
-        db = AppDatabase.getDatabase(this);
         listViewPartidas = findViewById(R.id.listViewPartidas);
-        FloatingActionButton fabAdicionarPartida = findViewById(R.id.fabAdicionarPartida);
+        editTextFiltroNickname = findViewById(R.id.editTextFiltroNickname);
 
         listaDePartidas = new ArrayList<>();
         mapaNicknamesJogadores = new HashMap<>();
 
-        executorService = Executors.newSingleThreadExecutor(); // Cria um executor que usa uma única thread
-        mainThreadHandler = new Handler(Looper.getMainLooper()); // Handler associado à thread principal
-
         adapter = new PartidaAdapter(this, listaDePartidas, mapaNicknamesJogadores);
         listViewPartidas.setAdapter(adapter);
+    }
 
-        fabAdicionarPartida.setOnClickListener(view -> {
-            Intent intent = new Intent(ListaPartidasActivity.this, FormularioPartidaActivity.class);
-            startActivity(intent);
+    private void configurarListeners() {
+        FloatingActionButton fabAdicionarPartida = findViewById(R.id.fabAdicionarPartida);
+        fabAdicionarPartida.setOnClickListener(view ->
+                startActivity(new Intent(this, FormularioPartidaActivity.class))
+        );
+
+        ImageButton botaoVoltarMain = findViewById(R.id.botaoVoltarMainPartidas);
+        botaoVoltarMain.setOnClickListener(v -> finish());
+
+        // Configura cliques na lista para editar ou excluir
+        listViewPartidas.setOnItemClickListener((parent, view, position, id) -> {
+            Partida partida = listaDePartidas.get(position);
+            Toast.makeText(this, "Editar partida (ainda não implementado)", Toast.LENGTH_SHORT).show();
         });
 
-        ImageButton botaoVoltarMainPartidas = findViewById(R.id.botaoVoltarMainPartidas);
-        botaoVoltarMainPartidas.setOnClickListener(v -> {
-            Intent intent = new Intent(ListaPartidasActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            finish();
+        listViewPartidas.setOnItemLongClickListener((parent, view, position, id) -> {
+            Partida partida = listaDePartidas.get(position);
+            exibirDialogoExclusaoPartida(partida);
+            return true;
         });
-        configurarListenersListView();
+    }
 
-        //filtrar partidas
-        editTextFiltroNickname = findViewById(R.id.editTextFiltroNickname);
-        Button botaoFiltrarPartidas = findViewById(R.id.botaoFiltrarPartidas);
-        Button botaoLimparFiltroPartidas = findViewById(R.id.botaoLimparFiltroPartidas);
+    private void configurarFiltro() {
+        Button botaoFiltrar = findViewById(R.id.botaoFiltrarPartidas);
+        Button botaoLimparFiltro = findViewById(R.id.botaoLimparFiltroPartidas);
 
-        botaoFiltrarPartidas.setOnClickListener(v -> {
+        botaoFiltrar.setOnClickListener(v -> {
             filtroNicknameAtual = editTextFiltroNickname.getText().toString().trim();
             if (!filtroNicknameAtual.isEmpty()) {
-                carregarDadosDasPartidas(); // Recarrega com o filtro
+                carregarDadosDasPartidas(); // Recarrega com o novo filtro
             } else {
-                Toast.makeText(ListaPartidasActivity.this, "Digite um nickname para filtrar.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Digite um nickname para filtrar.", Toast.LENGTH_SHORT).show();
             }
         });
 
-        botaoLimparFiltroPartidas.setOnClickListener(v -> {
+        botaoLimparFiltro.setOnClickListener(v -> {
             editTextFiltroNickname.setText("");
             filtroNicknameAtual = null;
-            carregarDadosDasPartidas(); // Recarrega mostrando todas as partidas
+            carregarDadosDasPartidas(); // Recarrega com a visão padrão (partidas do usuário logado)
         });
     }
 
@@ -110,73 +126,70 @@ public class ListaPartidasActivity extends AppCompatActivity {
 
     private void verificarLogin() {
         boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);
-
         if (!isLoggedIn) {
             Intent intent = new Intent(ListaPartidasActivity.this, LoginActivity.class);
-
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
             startActivity(intent);
-
             finish();
         }
     }
 
+    // Orquestra o carregamento de dados. Pega o ID do usuário logado e inicia a busca de dados
     private void carregarDadosDasPartidas() {
+        int usuarioLogadoId = sharedPreferences.getInt("usuario_id", -1);
+        if (usuarioLogadoId == -1) {
+            Toast.makeText(this, "Erro: sessão de usuário inválida.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // Inicia a tarefa em background, passando o ID do usuário logado
+        buscarDadosEmBackground(usuarioLogadoId);
+    }
+
+    // Executa as consultas ao banco de dados em uma thread separada
+    private void buscarDadosEmBackground(int usuarioLogadoId) {
         executorService.execute(() -> {
-            List<Partida> partidasDoBanco = null;
-            Map<Integer, String> nicknamesDoBanco = new HashMap<>();
-            boolean sucesso = false;
-
             try {
-                // Lógica de filtro
-                if (filtroNicknameAtual == null || filtroNicknameAtual.isEmpty()) {
-                    // Sem filtro, carregar todas as partidas
-                    partidasDoBanco = db.partidaDao().getAllPartidas();
+                // 1. Busca o mapa de nicknames. Precisaremos dele em qualquer caso.
+                Map<Integer, String> nicknames = new HashMap<>();
+                for (Usuario u : db.usuarioDao().getAllUsuarios()) {
+                    nicknames.put(u.getIdUsuario(), u.getNickname());
                 }
 
+                // 2. Decide qual lista de partidas buscar
+                List<Partida> partidas;
                 if (filtroNicknameAtual != null && !filtroNicknameAtual.isEmpty()) {
+                    // Se há um filtro ativo, busca pelo nickname digitado
                     Usuario usuarioFiltrado = db.usuarioDao().encontreUsuarioPorNickName(filtroNicknameAtual);
-
-                    if (usuarioFiltrado == null) {
-                        partidasDoBanco = new ArrayList<>(); // Nickname não encontrado, lista vazia
-                        mainThreadHandler.post(()-> Toast.makeText(ListaPartidasActivity.this, "Jogador '" + filtroNicknameAtual + "' não encontrado.", Toast.LENGTH_SHORT).show());
+                    if (usuarioFiltrado != null) {
+                        partidas = db.partidaDao().encontrarPartidasPeloIdJogador(usuarioFiltrado.getIdUsuario());
+                    } else {
+                        mainThreadHandler.post(() -> Toast.makeText(this, "Usuário '" + filtroNicknameAtual + "' não encontrado.", Toast.LENGTH_SHORT).show());
+                        partidas = new ArrayList<>(); // Retorna lista vazia se não achou
                     }
-                    else {
-                        partidasDoBanco = db.partidaDao().encontrarPartidasPeloIdJogador(usuarioFiltrado.getIdUsuario());
-                    }
-
+                } else {
+                    // CASO PADRÃO: Se não há filtro, mostra as partidas do USUÁRIO LOGADO
+                    partidas = db.partidaDao().encontrarPartidasPeloIdJogador(usuarioLogadoId);
                 }
 
-                // Obter nicknames para todas as partidas exibidas (ou todos os jogadores se for mais fácil)
-                List<Usuario> todosJogadores = db.usuarioDao().getAllUsuarios();
-                for (Usuario usuario : todosJogadores) {
-                    nicknamesDoBanco.put(usuario.getIdUsuario(), usuario.getNickname());
-                }
-                sucesso = true;
+                // 3. Com os dados prontos, posta para a UI Thread para atualizar a tela
+                mainThreadHandler.post(() -> atualizarInterface(partidas, nicknames));
+
+            } catch (Exception e) {
+                mainThreadHandler.post(() -> Toast.makeText(this, "Erro ao carregar dados das partidas.", Toast.LENGTH_SHORT).show());
             }
-            catch (Exception e) {
-                android.util.Log.e("ListaPartidas", "Erro ao carregar dados", e);
-            }
-
-            final List<Partida> finalPartidasDoBanco = partidasDoBanco;
-            final Map<Integer, String> finalNicknamesDoBanco = nicknamesDoBanco;
-            final boolean finalSucesso = sucesso;
-
-            mainThreadHandler.post(() -> {
-                if (finalSucesso && finalPartidasDoBanco != null) {
-                    listaDePartidas.clear();
-                    listaDePartidas.addAll(finalPartidasDoBanco);
-
-                    mapaNicknamesJogadores.clear();
-                    mapaNicknamesJogadores.putAll(finalNicknamesDoBanco); // Garante que o mapa da activity esteja atualizado
-
-                    adapter.notifyDataSetChanged();
-                } else if (!finalSucesso) { // Apenas mostrar erro se falhou, não se a lista filtrada for vazia por jogador não encontrado
-                    Toast.makeText(ListaPartidasActivity.this, "Erro ao carregar partidas.", Toast.LENGTH_SHORT).show();
-                }
-            });
         });
+    }
+
+    // Atualiza o adapter e a UI com os novos dados vindos do banco.
+    private void atualizarInterface(List<Partida> partidas, Map<Integer, String> nicknames) {
+        listaDePartidas.clear();
+        listaDePartidas.addAll(partidas);
+
+        mapaNicknamesJogadores.clear();
+        mapaNicknamesJogadores.putAll(nicknames);
+
+        // Notifica o adapter que os dados mudaram, para que ele redesenhe a lista
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -185,24 +198,6 @@ public class ListaPartidasActivity extends AppCompatActivity {
         if (executorService != null) {
             executorService.shutdown();
         }
-    }
-
-    // Excluir partida
-    private void configurarListenersListView() {
-        listViewPartidas.setOnItemClickListener((parent, view, position, id) -> {
-            Partida partidaSelecionada = listaDePartidas.get(position);
-            /* Lógica para editar - ainda não implementada
-            Intent intent = new Intent(ListaPartidasActivity.this, FormularioPartidaActivity.class);
-            intent.putExtra("PARTIDA_ID", partidaSelecionada.idPartida);
-            startActivity(intent); */
-            Toast.makeText(this, "Editar partida (ID): " + partidaSelecionada.idPartida, Toast.LENGTH_SHORT).show();
-        });
-
-        listViewPartidas.setOnItemLongClickListener((parent, view, position, id) -> {
-            Partida partidaSelecionada = listaDePartidas.get(position);
-            exibirDialogoExclusaoPartida(partidaSelecionada); // Chamar o diálogo
-            return true; // Evento consumido
-        });
     }
 
     private void exibirDialogoExclusaoPartida(final Partida partida) {

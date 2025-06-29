@@ -72,8 +72,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
         usuarioDao = AppDatabase.getDatabase(getApplicationContext()).usuarioDao();
-        sharedPreferences = getSharedPreferences("login_prefs", Context.MODE_PRIVATE);
-
         editEmail = findViewById(R.id.edit_text_email_login);
         editSenha = findViewById(R.id.edit_text_senha_login);
         buttonEntrar = findViewById(R.id.button_entrar);

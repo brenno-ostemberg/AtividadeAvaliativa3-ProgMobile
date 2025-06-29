@@ -80,7 +80,7 @@ public class FormularioPartidaActivity extends AppCompatActivity {
 
     private void carregarDadosIniciais() {
         // 1. Pega o ID do usuário logado
-        int idUsuarioLogado = sharedPreferences.getInt("id_usuario_logado", -1);
+        int idUsuarioLogado = sharedPreferences.getInt("usuario_id", -1);
 
         // 2. Se não existe ID então já encerra a tela
         if (idUsuarioLogado == -1) {
